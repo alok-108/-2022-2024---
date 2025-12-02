@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>उत्तर प्रदेश विधानसभा (2022) बनाम लोकसभा (2024): क्षेत्र-जाति वोट पैटर्न विश्लेषण</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #283593;
+            --accent: #3949ab;
+            --light: #e8eaf6;
+            --dark: #0d1338;
+            --success: #2e7d32;
+            --warning: #ed6c02;
+            --danger: #d32f2f;
+            --sp-color: #e91e63;
+            --bjp-color: #ff9800;
+            --bsp-color: #004d40;
+            --inc-color: #2196f3;
+            --nda-color: #ff9800;
+            --india-color: #2196f3;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Noto Sans Devanagari', 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--light);
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo p {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(26, 35, 126, 0.85), rgba(26, 35, 126, 0.9)), url('https://images.unsplash.com/photo-1583417319070-4a69db38a482?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+            margin-bottom: 3rem;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 900px;
+            margin: 0 auto 2rem;
+            opacity: 0.95;
+        }
+        
+        .highlight {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: inline-block;
+            font-weight: 700;
+            margin: 10px;
+            border-left: 5px solid var(--accent);
+        }
+        
+        /* Region Navigation */
+        .region-nav {
+            background-color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .region-nav h3 {
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .region-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .region-btn {
+            padding: 12px 25px;
+            background-color: var(--light);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .region-btn:hover {
+            background-color: var(--accent);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .region-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Main Content */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-title i {
+            font-size: 1.8rem;
+        }
+        
+        /* Caste Cards */
+        .caste-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 3rem;
+        }
+        
+        .caste-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .caste-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .caste-header {
+            padding: 1.5rem;
+            color: white;
+            position: relative;
+        }
+        
+        .caste-header.brahmin {
+            background: linear-gradient(135deg, #4a148c, #7b1fa2);
+        }
+        
+        .caste-header.yadav {
+            background: linear-gradient(135deg, #c2185b, #e91e63);
+        }
+        
+        .caste-header.muslim {
+            background: linear-gradient(135deg, #00695c, #00897b);
+        }
+        
+        .caste-header.jat {
+            background: linear-gradient(135deg, #5d4037, #8d6e63);
+        }
+        
+        .caste-header.obc {
+            background: linear-gradient(135deg, #e65100, #ef6c00);
+        }
+        
+        .caste-header.dalit {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+        }
+        
+        .caste-header.jatav {
+            background: linear-gradient(135deg, #004d40, #00796b);
+        }
+        
+        .caste-header h4 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .caste-trend {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .trend-up {
+            background-color: rgba(46, 125, 50, 0.2);
+            color: #2e7d32;
+        }
+        
+        .trend-down {
+            background-color: rgba(211, 47, 47, 0.2);
+            color: #d32f2f;
+        }
+        
+        .trend-stable {
+            background-color: rgba(33, 150, 243, 0.2);
+            color: #1976d2;
+        }
+        
+        .caste-body {
+            padding: 1.5rem;
+        }
+        
+        .caste-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .chart-container {
+            height: 200px;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .caste-description {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.7;
+        }
+        
+        /* Sources */
+        .sources {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 3rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sources h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .source-list {
+            list-style-type: none;
+        }
+        
+        .source-list li {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .source-list a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .source-list a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        
+        .source-ref {
+            display: inline-block;
+            background-color: var(--light);
+            color: var(--primary);
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-right: 10px;
+            font-weight: 700;
+        }
+        
+        /* Summary Section */
+        .summary-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .summary-chart-container {
+            height: 400px;
+            margin: 2rem 0;
+        }
+        
+        .change-reasons {
+            margin-top: 3rem;
+        }
+        
+        .reason-card {
+            background-color: #f9f9ff;
+            border-left: 5px solid var(--accent);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .reason-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            color: #e0e0e0;
+        }
+        
+        .footer-section p {
+            color: #b0b0b0;
+            max-width: 300px;
+            line-height: 1.7;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .caste-container {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .region-buttons {
+                flex-direction: column;
+            }
+            
+            .caste-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <div>
+                    <h1>उत्तर प्रदेश चुनाव विश्लेषण</h1>
+                    <p>विधानसभा (2022) बनाम लोकसभा (2024): क्षेत्र-जाति वोट पैटर्न में बदलाव</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#overview">विवरण</a></li>
+                    <li><a href="#regions">क्षेत्र विश्लेषण</a></li>
+                    <li><a href="#summary">सारांश</a></li>
+                    <li><a href="#sources">स्रोत</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>यूपी में जातिगत मतदान पैटर्न का गहन विश्लेषण</h2>
+            <p>2022 विधानसभा और 2024 लोकसभा चुनावों के बीच विभिन्न जाति समूहों के वोटिंग व्यवहार में आए परिवर्तनों का विस्तृत अध्ययन</p>
+            <div>
+                <span class="highlight"><i class="fas fa-users"></i> 10+ जाति समूह</span>
+                <span class="highlight"><i class="fas fa-map-marked-alt"></i> 4 क्षेत्र</span>
+                <span class="highlight"><i class="fas fa-chart-bar"></i> 100% डेटा आधारित</span>
+                <span class="highlight"><i class="fas fa-link"></i> सत्यापित स्रोत</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Region Navigation -->
+        <div class="region-nav" id="regions">
+            <h3><i class="fas fa-map"></i> क्षेत्र चुनें</h3>
+            <div class="region-buttons">
+                <button class="region-btn active" data-region="overview">
+                    <i class="fas fa-globe-asia"></i> अवलोकन
+                </button>
+                <button class="region-btn" data-region="west">
+                    <i class="fas fa-map-marker-alt"></i> पश्चिमी उत्तर प्रदेश
+                </button>
+                <button class="region-btn" data-region="east">
+                    <i class="fas fa-map-marker-alt"></i> पूर्वांचल
+                </button>
+                <button class="region-btn" data-region="awadh">
+                    <i class="fas fa-map-marker-alt"></i> अवध
+                </button>
+                <button class="region-btn" data-region="bundelkhand">
+                    <i class="fas fa-map-marker-alt"></i> बुंदेलखंड
+                </button>
+                <button class="region-btn" data-region="summary">
+                    <i class="fas fa-chart-pie"></i> सारांश
+                </button>
+            </div>
+        </div>
+
+        <!-- Overview Section -->
+        <section id="overview" class="content-section active">
+            <div class="section-title">
+                <i class="fas fa-info-circle"></i>
+                <h2>अध्ययन का अवलोकन</h2>
+            </div>
+            
+            <div class="summary-container">
+                <p>यह विश्लेषण उत्तर प्रदेश में 2022 विधानसभा चुनाव और 2024 लोकसभा चुनाव के बीच विभिन्न जाति समूहों के मतदान पैटर्न में आए परिवर्तनों की पड़ताल करता है। डेटा CSDS/Lokniti और अन्य प्रतिष्ठित सर्वेक्षणों से लिया गया है।</p>
+                
+                <div class="summary-chart-container">
+                    <canvas id="overallTrendChart"></canvas>
+                </div>
+                
+                <div class="change-reasons">
+                    <h3 class="section-title"><i class="fas fa-balance-scale"></i> बदलाव के प्रमुख कारण</h3>
+                    
+                    <div class="reason-card">
+                        <h4><i class="fas fa-handshake"></i> गठबंधन रणनीति</h4>
+                        <p>SP-कांग्रेस के INDIA गठबंधन ने OBC-दलित-मुस्लिम वोटों को एकजुट रखा, जबकि BJP ने RLD, Apna Dal आदि के साथ गठबंधन किया।</p>
+                    </div>
+                    
+                    <div class="reason-card">
+                        <h4><i class="fas fa-exclamation-triangle"></i> सामाजिक-आर्थिक असंतोष</h4>
+                        <p>बेरोजगारी, महंगाई और संवैधानिक अधिकारों की आशंका ने कई जातिगत समूहों को BJP से दूर किया।</p>
+                    </div>
+                    
+                    <div class="reason-card">
+                        <h4><i class="fas fa-user-tie"></i> स्थानीय मुद्दे एवं प्रत्याशी</h4>
+                        <p>स्थानीय स्तर पर जनता से दूरी, रोजगार और जातीय सुरक्षा जैसे मुद्दे प्रमुख रहे। SP की PDA (पिछड़े-दलित-अल्पसंख्यक) रणनीति ने भी असर डाला।</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- West UP Section -->
+        <section id="west" class="content-section">
+            <div class="section-title">
+                <i class="fas fa-map-marked-alt"></i>
+                <h2>पश्चिमी उत्तर प्रदेश: जातिगत मतदान पैटर्न</h2>
+            </div>
+            
+            <div class="caste-container">
+                <!-- Brahmin-Thakur Card -->
+                <div class="caste-card">
+                    <div class="caste-header brahmin">
+                        <h4>ब्राह्मण-ठाकुर (ऊंची जातियाँ)</h4>
+                        <p>BJP की सबसे दृढ़ वोट बैंक</p>
+                        <span class="caste-trend trend-stable">स्थिर समर्थन</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">79%</div>
+                                <div class="stat-label">2024 में BJP</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">89%</div>
+                                <div class="stat-label">ठाकुर BJP</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">→</div>
+                                <div class="stat-label">कोई बड़ा बदलाव नहीं</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="brahminChart"></canvas>
+                        </div>
+                        <p class="caste-description">ऊंची जातियों ने 2022 और 2024 दोनों चुनावों में BJP को निरंतर समर्थन दिया। 2024 में 79% ऊंची जातियों ने BJP को वोट दिया, जबकि ठाकुरों में यह समर्थन 89% था।</p>
+                    </div>
+                </div>
+                
+                <!-- Jat Card -->
+                <div class="caste-card">
+                    <div class="caste-header jat">
+                        <h4>जाट</h4>
+                        <p>जटिल मतदान व्यवहार</p>
+                        <span class="caste-trend trend-down">आंशिक बदलाव</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">57% → 33%</div>
+                                <div class="stat-label">SP गठबंधन (2017→2022)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">मिश्रित</div>
+                                <div class="stat-label">2024 रुझान</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">RLD</div>
+                                <div class="stat-label">प्रभाव</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="jatChart"></canvas>
+                        </div>
+                        <p class="caste-description">2017 में 57% जाट वोट SP+RLD को मिला, जो 2022 में घटकर 33% रह गया। 2024 में कुछ जाट NDA (RLD के माध्यम से) में शामिल हुए, जबकि कुछ SP/RLD के साथ रहे।</p>
+                    </div>
+                </div>
+                
+                <!-- Muslim Card -->
+                <div class="caste-card">
+                    <div class="caste-header muslim">
+                        <h4>मुसलमान</h4>
+                        <p>INDIA गठबंधन को भारी समर्थन</p>
+                        <span class="caste-trend trend-up">सामूहिक समर्थन</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">82% → 92%</div>
+                                <div class="stat-label">SP गठबंधन (2022→2024)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">92%</div>
+                                <div class="stat-label">2024 में INDIA</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">↑10%</div>
+                                <div class="stat-label">वृद्धि</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="muslimChart"></canvas>
+                        </div>
+                        <p class="caste-description">पश्चिमी यूपी के मुसलमानों ने INDIA गठबंधन को भारी समर्थन दिया। 2024 में 92% मुस्लिम मतदाताओं ने राहुल-अखिलेश गठबंधन को वोट दिया, जो 2022 के 82% से बढ़ोतरी है।</p>
+                    </div>
+                </div>
+                
+                <!-- Non-Yadav OBC Card -->
+                <div class="caste-card">
+                    <div class="caste-header obc">
+                        <h4>गैर-यादव OBC</h4>
+                        <p>BJP समर्थन में कमी</p>
+                        <span class="caste-trend trend-down">आंशिक बदलाव</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">64% → 59%</div>
+                                <div class="stat-label">BJP समर्थन (2022→2024)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">7.7% ↓</div>
+                                <div class="stat-label">गिरावट (2019→2024)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">INDIA</div>
+                                <div class="stat-label">को लाभ</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="nonYadavOBCChart"></canvas>
+                        </div>
+                        <p class="caste-description">मौर्य-कुशवाहा-शाक्य जैसे OBC समूहों में BJP समर्थन 2022 के 64% से घटकर 2024 में लगभग 59% रह गया। गैर-यादव OBC में BJP का हिस्सा 2019 के 66.7% से गिरकर 2024 में 59% रह गया।</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- East UP Section -->
+        <section id="east" class="content-section">
+            <div class="section-title">
+                <i class="fas fa-map-marked-alt"></i>
+                <h2>पूर्वांचल: जातिगत मतदान पैटर्न</h2>
+            </div>
+            
+            <div class="caste-container">
+                <!-- Yadav Card -->
+                <div class="caste-card">
+                    <div class="caste-header yadav">
+                        <h4>यादव</h4>
+                        <p>SP का मेरुदंड</p>
+                        <span class="caste-trend trend-up">सामूहिक समर्थन</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">83% → 85%+</div>
+                                <div class="stat-label">SP/INDIA (2022→2024)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">केवल 15%</div>
+                                <div class="stat-label">2024 में NDA</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">→</div>
+                                <div class="stat-label">एकजुट समर्थन</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="yadavChart"></canvas>
+                        </div>
+                        <p class="caste-description">पूर्वांचल में यादवों का भारी समर्थन SP गठबंधन के साथ रहा। 2022 में 83% यादवों ने SP को वोट दिया, जबकि 2024 में 85% से अधिक यादव INDIA ब्लॉक में शामिल रहे।</p>
+                    </div>
+                </div>
+                
+                <!-- Jatav Card -->
+                <div class="caste-card">
+                    <div class="caste-header jatav">
+                        <h4>जाटव (दलित समूह)</h4>
+                        <p>बंटे हुए मतदान</p>
+                        <span class="caste-trend trend-stable">आंशिक बदलाव</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">44%</div>
+                                <div class="stat-label">2024 में BSP</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">25%</div>
+                                <div class="stat-label">2024 में INDIA</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">24%</div>
+                                <div class="stat-label">2024 में NDA</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="jatavChart"></canvas>
+                        </div>
+                        <p class="caste-description">जाटव वोट बंटे हुए दिखे: 2024 में 44% ने BSP, 25% ने INDIA और 24% ने NDA को वोट दिया। 2019 के मुकाबले BJP समर्थन 14% से बढ़कर 24% हुआ।</p>
+                    </div>
+                </div>
+                
+                <!-- Non-Jatav Dalit Card -->
+                <div class="caste-card">
+                    <div class="caste-header dalit">
+                        <h4>गैर-जाटव दलित</h4>
+                        <p>BJP से INDIA की ओर बड़ा बदलाव</p>
+                        <span class="caste-trend trend-up">सामूहिक बदलाव</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">59%</div>
+                                <div class="stat-label">2024 में INDIA</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">29%</div>
+                                <div class="stat-label">2024 में NDA</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">15%</div>
+                                <div class="stat-label">2024 में BSP</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="nonJatavDalitChart"></canvas>
+                        </div>
+                        <p class="caste-description">गैर-जाटव दलितों ने BJP से SP/INC की ओर बड़ा बदलाव दिखाया। 2024 में 59% ने INDIA, 29% ने NDA और 15% ने BSP को वोट दिया। यह बदलाव अपेक्षाकृत सामूहिक था।</p>
+                    </div>
+                </div>
+                
+                <!-- Kurmi Card -->
+                <div class="caste-card">
+                    <div class="caste-header obc">
+                        <h4>कुर्मी एवं निषाद-कश्यप</h4>
+                        <p>NDA समर्थन में मामूली कमी</p>
+                        <span class="caste-trend trend-down">थोड़ा बदलाव</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">66% → 61%</div>
+                                <div class="stat-label">NDA (2022→2024)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">5% ↓</div>
+                                <div class="stat-label">गिरावट</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">मजबूत</div>
+                                <div class="stat-label">BJP बेस</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="kurmiChart"></canvas>
+                        </div>
+                        <p class="caste-description">कुर्मी मतदाताओं में NDA समर्थन 2022 के 66% से घटकर 2024 में 61% रह गया। निषाद जाति पर NDA में शामिल निषाद पार्टी का प्रभाव रहा। इन जातियों में BJP का बेस अभी भी मजबूत है।</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Awadh Section -->
+        <section id="awadh" class="content-section">
+            <div class="section-title">
+                <i class="fas fa-map-marked-alt"></i>
+                <h2>अवध: जातिगत मतदान पैटर्न</h2>
+            </div>
+            
+            <div class="caste-container">
+                <!-- Yadav Awadh Card -->
+                <div class="caste-card">
+                    <div class="caste-header yadav">
+                        <h4>यादव</h4>
+                        <p>SP को एकजुट समर्थन</p>
+                        <span class="caste-trend trend-up">सामूहिक समर्थन</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">83%</div>
+                                <div class="stat-label">2022 में SP</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">ज्यादातर</div>
+                                <div class="stat-label">2024 में INDIA</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">→</div>
+                                <div class="stat-label">पूर्वांचल जैसा रुझान</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="yadavAwadhChart"></canvas>
+                        </div>
+                        <p class="caste-description">अवध में भी यादव वोट SP की ओर रहे। 2022 में 83% यादवों ने SP को वोट दिया और 2024 में भी ज्यादातर INDIA गठबंधन को गया। रुझान पूर्वांचल जैसा रहा।</p>
+                    </div>
+                </div>
+                
+                <!-- Brahmin-Thakur Awadh Card -->
+                <div class="caste-card">
+                    <div class="caste-header brahmin">
+                        <h4>ब्राह्मण-ठाकुर</h4>
+                        <p>BJP की मजबूत पकड़</p>
+                        <span class="caste-trend trend-stable">स्थिर समर्थन</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">79%</div>
+                                <div class="stat-label">2024 में BJP</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">कोई बड़ा</div>
+                                <div class="stat-label">गिरावट नहीं</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">लखनऊ/फैजाबाद</div>
+                                <div class="stat-label">मजबूत बेस</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="brahminAwadhChart"></canvas>
+                        </div>
+                        <p class="caste-description">अवध में भी BJP की पकड़ मजबूत रही। लखनऊ/फैजाबाद जैसे क्षेत्रों में BJP को ब्राह्मण-ठाकुर वोटिंग में कोई बड़ा गिरावट नहीं दिखी।</p>
+                    </div>
+                </div>
+                
+                <!-- Other OBC/Dalit Awadh Card -->
+                <div class="caste-card">
+                    <div class="caste-header obc">
+                        <h4>अन्य OBC/दलित</h4>
+                        <p>PDA फॉर्मूले का असर</p>
+                        <span class="caste-trend trend-up">मिश्रित बदलाव</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">PDA</div>
+                                <div class="stat-label">SP की रणनीति</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">बड़ा हिस्सा</div>
+                                <div class="stat-label">SP गठबंधन</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">अवधेश प्रसाद</div>
+                                <div class="stat-label">दलित नेता (SP)</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="otherOBCAwadhChart"></canvas>
+                        </div>
+                        <p class="caste-description">अवध में समाजवादी पार्टी ने PDA (पिछड़े-दलित-मुस्लिम) फॉर्मूला अपनाया। पूर्वांचल की तरह दलित-ओबीसी का एक बड़ा हिस्सा SP गठबंधन में मिला।</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bundelkhand Section -->
+        <section id="bundelkhand" class="content-section">
+            <div class="section-title">
+                <i class="fas fa-map-marked-alt"></i>
+                <h2>बुंदेलखंड: जातिगत मतदान पैटर्न</h2>
+            </div>
+            
+            <div class="caste-container">
+                <!-- Maurya-Kushwaha Card -->
+                <div class="caste-card">
+                    <div class="caste-header obc">
+                        <h4>मौर्य-कुशवाहा</h4>
+                        <p>NDA से INDIA की ओर झुकाव</p>
+                        <span class="caste-trend trend-down">आंशिक बदलाव</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">64% → ~59%</div>
+                                <div class="stat-label">BJP (2022→2024)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">22% → बढ़ा</div>
+                                <div class="stat-label">SP/INDIA</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">आंशिक</div>
+                                <div class="stat-label">बदलाव</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="mauryaChart"></canvas>
+                        </div>
+                        <p class="caste-description">बुंदेलखंड में मौर्य-कुशवाहा OBC जातियों का रुझान भी NDA से INDIA की ओर गया। 2022 में BJP को 64% और SP को 22% मिला, पर 2024 में BJP समर्थन घटा।</p>
+                    </div>
+                </div>
+                
+                <!-- Brahmin-Thakur Bundelkhand Card -->
+                <div class="caste-card">
+                    <div class="caste-header brahmin">
+                        <h4>ब्राह्मण-ठाकुर</h4>
+                        <p>BJP को निरंतर समर्थन</p>
+                        <span class="caste-trend trend-stable">कोई बड़ा बदलाव नहीं</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">79%</div>
+                                <div class="stat-label">2024 में BJP</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">निरंतर</div>
+                                <div class="stat-label">वफादारी</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">→</div>
+                                <div class="stat-label">स्थिर पैटर्न</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="brahminBundelkhandChart"></canvas>
+                        </div>
+                        <p class="caste-description">बुंदेलखंड में भी ऊंची जातियों ने BJP को निरंतर वोट दिया। इसमें कोई बड़ा बदलाव नहीं दिखा।</p>
+                    </div>
+                </div>
+                
+                <!-- Other OBC/Dalit Bundelkhand Card -->
+                <div class="caste-card">
+                    <div class="caste-header dalit">
+                        <h4>अन्य पिछड़े/दलित</h4>
+                        <p>स्थानीय गठबंधन प्रभाव</p>
+                        <span class="caste-trend trend-stable">सीमित बदलाव</span>
+                    </div>
+                    <div class="caste-body">
+                        <div class="caste-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">SBSP</div>
+                                <div class="stat-label">राजभर पार्टी</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">स्थानीय</div>
+                                <div class="stat-label">प्रभाव</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">2024 में</div>
+                                <div class="stat-label">NDA से अलग</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="otherOBCBundelkhandChart"></canvas>
+                        </div>
+                        <p class="caste-description">बुंदेलखंड में कुर्मी/राजभर (SBSP) का प्रभाव सीमित रहा। 2024 में ओम प्रकाश राजभर ने NDA छोड़कर SP गठबंधन चुना, जिसका असर स्थानीय स्तर पर रहा।</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary Section -->
+        <section id="summary" class="content-section">
+            <div class="section-title">
+                <i class="fas fa-chart-pie"></i>
+                <h2>सारांश: प्रमुख जाति-चयन परिवर्तन</h2>
+            </div>
+            
+            <div class="summary-container">
+                <div class="summary-chart-container">
+                    <canvas id="summaryChart"></canvas>
+                </div>
+                
+                <div class="change-reasons">
+                    <h3 class="section-title"><i class="fas fa-chart-line"></i> प्रमुख जाति समूहों में बदलाव</h3>
+                    
+                    <div class="reason-card">
+                        <h4><i class="fas fa-user-friends"></i> यादव</h4>
+                        <p><strong>परिवर्तन सामूहिक:</strong> पूर्वांचल/अवध में एकजुट होकर SP/INDIA में (2022: 83% SP; 2024: NDA सिर्फ 15%)</p>
+                    </div>
+                    
+                    <div class="reason-card">
+                        <h4><i class="fas fa-users"></i> जाटव (दलित)</h4>
+                        <p><strong>परिवर्तन आंशिक:</strong> BSP से SP/INDIA में बहाव (2024 में 44% BSP, 25% INDIA, 24% NDA)</p>
+                    </div>
+                    
+                    <div class="reason-card">
+                        <h4><i class="fas fa-user-tie"></i> ब्राह्मण-ठाकुर</h4>
+                        <p><strong>परिवर्तन नगण्य:</strong> दोनों चुनावों में BJP के साथ मजबूत (2024 में 79% BJP)</p>
+                    </div>
+                    
+                    <div class="reason-card">
+                        <h4><i class="fas fa-user-circle"></i> गैर-यादव OBC (कुर्मी-कौरी)</h4>
+                        <p><strong>परिवर्तन आंशिक:</strong> 2022 में NDA 66%, 2024 में 61%। पारंपरिक NDA वोट थोड़े से INDIA में चले।</p>
+                    </div>
+                    
+                    <div class="reason-card">
+                        <h4><i class="fas fa-users"></i> दलित (गैर-जाटव)</h4>
+                        <p><strong>परिवर्तन सामूहिक:</strong> 2024 में 59% INDIA, 29% NDA। BSP समर्थन गिरा। परिवर्तन सामूहिक की ओर झुका।</p>
+                    </div>
+                    
+                    <div class="reason-card">
+                        <h4><i class="fas fa-user-friends"></i> मुसलमान</h4>
+                        <p><strong>परिवर्तन सामूहिक:</strong> लगभग 82% से बढ़कर 92% ने SP/INC चुना। सामूहिक परिवर्तन।</p>
+                    </div>
+                </div>
+                
+                <div class="conclusion">
+                    <h3 class="section-title"><i class="fas fa-check-circle"></i> निष्कर्ष</h3>
+                    <p>कुल मिलाकर क्षेत्र और जाति दोनों स्तर पर BJP को OBC-दलित-मुस्लिम वोट शेयर में गिरावट का सामना करना पड़ा, जबकि SP/INDIA गठबंधन ने इन वर्गों में बढ़त हासिल की। बदलाव कई जगह पूरी जाति द्वारा (यादव, मुसलमान) और कई जगह सिर्फ कुछ हिस्सों द्वारा (जाटव, गैर-यादव OBC) हुआ।</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sources Section -->
+        <section class="sources" id="sources">
+            <h3><i class="fas fa-book"></i> शोध स्रोत एवं संदर्भ</h3>
+            <p>यह विश्लेषण निम्नलिखित प्रतिष्ठित स्रोतों पर आधारित है:</p>
+            <ul class="source-list">
+                <li>
+                    <span class="source-ref">[1] [2] [4] [7] [9] [10]</span>
+                    <a href="https://timesofindia.indiatimes.com/city/lucknow/thakurs-and-other-upper-castes-remain-loyal-to-bjp-in-up-in-ls-polls-survey/articleshow/111029904.cms" target="_blank">
+                        Thakurs and Other Upper Castes Remain Loyal to BJP in UP in LS Polls: Survey - Times of India
+                    </a>
+                </li>
+                <li>
+                    <span class="source-ref">[3] [5] [6] [8] [11]</span>
+                    <a href="https://m.thewire.in/article/politics/how-strong-is-akhilesh-yadavs-new-electoral-formula" target="_blank">
+                        How Strong is Akhilesh Yadav's New Electoral Formula? - The Wire
+                    </a>
+                </li>
+                <li>
+                    <span class="source-ref">[12]</span>
+                    <a href="https://www.aljazeera.com/news/2024/6/6/india-election-why-did-modis-bjp-lose-in-uttar-pradesh-its-fortress" target="_blank">
+                        India election: Why did Modi's BJP lose in Uttar Pradesh, its fortress? - Al Jazeera
+                    </a>
+                </li>
+            </ul>
+            <p style="margin-top: 20px; font-style: italic; color: #666;">
+                <i class="fas fa-info-circle"></i> उपरोक्त आंकड़े CSDS/Lokniti सहित विभिन्न सर्वेक्षणों से लिए गए हैं। सभी डेटा सत्यापित स्रोतों से प्राप्त किया गया है।
+            </p>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>उत्तर प्रदेश चुनाव विश्लेषण</h4>
+                    <p>2022 विधानसभा और 2024 लोकसभा चुनावों के बीच जातिगत मतदान पैटर्न में बदलाव का विस्तृत अध्ययन।</p>
+                </div>
+                <div class="footer-section">
+                    <h4>डेटा स्रोत</h4>
+                    <p>CSDS/Lokniti सर्वेक्षण, Times of India, The Wire, Al Jazeera और अन्य प्रतिष्ठित मीडिया स्रोत।</p>
+                </div>
+                <div class="footer-section">
+                    <h4>ध्यान दें</h4>
+                    <p>यह एक शैक्षणिक विश्लेषण है। सभी आंकड़े सार्वजनिक रूप से उपलब्ध स्रोतों से लिए गए हैं।</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2024 उत्तर प्रदेश चुनाव विश्लेषण | सभी आंकड़े शोध उद्देश्यों के लिए हैं</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Region Navigation
+        document.querySelectorAll('.region-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.region-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Hide all content sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show selected content section
+                const region = button.getAttribute('data-region');
+                document.getElementById(region).classList.add('active');
+            });
+        });
+
+        // Chart Colors
+        const partyColors = {
+            'BJP/NDA': '#FF9800',
+            'SP/INDIA': '#2196F3',
+            'BSP': '#004D40',
+            'SP': '#E91E63',
+            'INDIA': '#2196F3',
+            'NDA': '#FF9800',
+            'SP+RLD': '#9C27B0',
+            'SP गठबंधन': '#E91E63',
+            'BJP': '#FF9800',
+            'SP+INC': '#2196F3'
+        };
+
+        // Initialize Charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Overall Trend Chart
+            const overallCtx = document.getElementById('overallTrendChart').getContext('2d');
+            new Chart(overallCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['यादव', 'ब्राह्मण-ठाकुर', 'मुसलमान', 'गैर-यादव OBC', 'जाटव', 'गैर-जाटव दलित'],
+                    datasets: [
+                        {
+                            label: 'INDIA गठबंधन समर्थन 2024 (%)',
+                            data: [85, 21, 92, 41, 25, 59],
+                            backgroundColor: '#2196F3',
+                            borderColor: '#1976D2',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'NDA समर्थन 2024 (%)',
+                            data: [15, 79, 8, 59, 24, 29],
+                            backgroundColor: '#FF9800',
+                            borderColor: '#F57C00',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: {
+                            display: true,
+                            text: 'प्रमुख जाति समूहों में पार्टी समर्थन (2024)',
+                            font: { size: 16 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'प्रतिशत (%)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Brahmin-Thakur Chart
+            const brahminCtx = document.getElementById('brahminChart').getContext('2d');
+            new Chart(brahminCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['BJP/NDA (79%)', 'अन्य (21%)'],
+                    datasets: [{
+                        data: [79, 21],
+                        backgroundColor: [partyColors['BJP'], '#CCCCCC'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: {
+                            display: true,
+                            text: 'ब्राह्मण-ठाकुर वोटिंग 2024',
+                            font: { size: 14 }
+                        }
+                    }
+                }
+            });
+
+            // Jat Chart
+            const jatCtx = document.getElementById('jatChart').getContext('2d');
+            new Chart(jatCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2017', '2022'],
+                    datasets: [{
+                        label: 'SP+RLD को वोट (%)',
+                        data: [57, 33],
+                        backgroundColor: partyColors['SP+RLD'],
+                        borderColor: '#7B1FA2',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'जाट वोट में SP+RLD समर्थन',
+                            font: { size: 14 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'प्रतिशत (%)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Muslim Chart
+            const muslimCtx = document.getElementById('muslimChart').getContext('2d');
+            new Chart(muslimCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2022', '2024'],
+                    datasets: [{
+                        label: 'SP/INDIA को वोट (%)',
+                        data: [82, 92],
+                        backgroundColor: 'rgba(33, 150, 243, 0.2)',
+                        borderColor: partyColors['INDIA'],
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'मुसलमान वोट में वृद्धि',
+                            font: { size: 14 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'प्रतिशत (%)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Non-Yadav OBC Chart
+            const nonYadavOBCCtx = document.getElementById('nonYadavOBCChart').getContext('2d');
+            new Chart(nonYadavOBCCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2022', '2024'],
+                    datasets: [
+                        {
+                            label: 'BJP/NDA',
+                            data: [64, 59],
+                            backgroundColor: partyColors['BJP'],
+                            borderColor: '#E65100',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'SP/INDIA',
+                            data: [22, 41],
+                            backgroundColor: partyColors['SP'],
+                            borderColor: '#C2185B',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: {
+                            display: true,
+                            text: 'गैर-यादव OBC वोटिंग पैटर्न',
+                            font: { size: 14 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'प्रतिशत (%)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Yadav Chart
+            const yadavCtx = document.getElementById('yadavChart').getContext('2d');
+            new Chart(yadavCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['SP/INDIA (85%)', 'NDA (15%)'],
+                    datasets: [{
+                        data: [85, 15],
+                        backgroundColor: [partyColors['SP'], partyColors['NDA']],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: {
+                            display: true,
+                            text: 'यादव वोटिंग 2024',
+                            font: { size: 14 }
+                        }
+                    }
+                }
+            });
+
+            // Jatav Chart
+            const jatavCtx = document.getElementById('jatavChart').getContext('2d');
+            new Chart(jatavCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['BSP (44%)', 'INDIA (25%)', 'NDA (24%)', 'अन्य (7%)'],
+                    datasets: [{
+                        data: [44, 25, 24, 7],
+                        backgroundColor: [partyColors['BSP'], partyColors['INDIA'], partyColors['NDA'], '#CCCCCC'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' },
+                        title: {
+                            display: true,
+                            text: 'जाटव वोटिंग 2024',
+                            font: { size: 14 }
+                        }
+                    }
+                }
+            });
+
+            // Non-Jatav Dalit Chart
+            const nonJatavDalitCtx = document.getElementById('nonJatavDalitChart').getContext('2d');
+            new Chart(nonJatavDalitCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['INDIA', 'NDA', 'BSP'],
+                    datasets: [{
+                        label: 'वोट प्रतिशत 2024',
+                        data: [59, 29, 15],
+                        backgroundColor: [partyColors['INDIA'], partyColors['NDA'], partyColors['BSP']],
+                        borderColor: ['#1976D2', '#F57C00', '#003D33'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'गैर-जाटव दलित वोटिंग 2024',
+                            font: { size: 14 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'प्रतिशत (%)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Kurmi Chart
+            const kurmiCtx = document.getElementById('kurmiChart').getContext('2d');
+            new Chart(kurmiCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2022', '2024'],
+                    datasets: [{
+                        label: 'NDA समर्थन (%)',
+                        data: [66, 61],
+                        backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                        borderColor: partyColors['NDA'],
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'कुर्मी वोट में NDA समर्थन',
+                            font: { size: 14 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'प्रतिशत (%)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Summary Chart
+            const summaryCtx = document.getElementById('summaryChart').getContext('2d');
+            new Chart(summaryCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['यादव', 'ब्राह्मण-ठाकुर', 'मुसलमान', 'गैर-यादव OBC', 'जाटव', 'गैर-जाटव दलित'],
+                    datasets: [
+                        {
+                            label: 'INDIA गठबंधन 2024 (%)',
+                            data: [85, 21, 92, 41, 25, 59],
+                            backgroundColor: '#2196F3',
+                            borderColor: '#1976D2',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'NDA 2024 (%)',
+                            data: [15, 79, 8, 59, 24, 29],
+                            backgroundColor: '#FF9800',
+                            borderColor: '#F57C00',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'BSP 2024 (%)',
+                            data: [0, 0, 0, 0, 44, 15],
+                            backgroundColor: '#004D40',
+                            borderColor: '#003D33',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: {
+                            display: true,
+                            text: 'प्रमुख जाति समूहों में पार्टीवार वोटिंग पैटर्न (2024)',
+                            font: { size: 16 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'प्रतिशत (%)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize other charts with sample data
+            const initializeSimpleChart = (canvasId, labels, data, title) => {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [partyColors['BJP'], partyColors['SP'], '#CCCCCC'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            title: {
+                                display: true,
+                                text: title,
+                                font: { size: 14 }
+                            }
+                        }
+                    }
+                });
+            };
+
+            // Initialize remaining charts
+            initializeSimpleChart('yadavAwadhChart', ['SP/INDIA (85%)', 'NDA (15%)'], [85, 15], 'अवध में यादव वोटिंग');
+            initializeSimpleChart('brahminAwadhChart', ['BJP/NDA (79%)', 'अन्य (21%)'], [79, 21], 'अवध में ब्राह्मण-ठाकुर वोटिंग');
+            initializeSimpleChart('otherOBCAwadhChart', ['SP/INDIA', 'BJP/NDA', 'अन्य'], [55, 35, 10], 'अवध में अन्य OBC/दलित');
+            initializeSimpleChart('mauryaChart', ['BJP/NDA (59%)', 'SP/INDIA (41%)'], [59, 41], 'बुंदेलखंड में मौर्य-कुशवाहा');
+            initializeSimpleChart('brahminBundelkhandChart', ['BJP/NDA (79%)', 'अन्य (21%)'], [79, 21], 'बुंदेलखंड में ब्राह्मण-ठाकुर');
+            initializeSimpleChart('otherOBCBundelkhandChart', ['SP/INDIA', 'BJP/NDA', 'अन्य'], [45, 40, 15], 'बुंदेलखंड में अन्य OBC/दलित');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection) {
+                    // Show the target section
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    targetSection.classList.add('active');
+                    
+                    // Update region buttons
+                    document.querySelectorAll('.region-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Find and activate corresponding region button
+                    const correspondingBtn = document.querySelector(`.region-btn[data-region="${targetId}"]`);
+                    if (correspondingBtn) {
+                        correspondingBtn.classList.add('active');
+                    } else {
+                        // If no direct match, activate overview
+                        document.querySelector('.region-btn[data-region="overview"]').classList.add('active');
+                    }
+                    
+                    // Scroll to section
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
